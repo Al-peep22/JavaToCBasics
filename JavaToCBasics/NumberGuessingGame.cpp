@@ -1,6 +1,16 @@
 #include <iostream>
+#include "GuessingGame.h"
 
 int main()
 {
-    std::cout << "Hello World!\n";
+    GuessingGame game = GuessingGame();
+    game.gameOn = true;
+    game.reset();
+    while (game.gameOn) {
+        if (game.restarted) {
+            game.getRange();
+            game.restarted = false;
+        }
+        game.getGuess();
+    }
 }

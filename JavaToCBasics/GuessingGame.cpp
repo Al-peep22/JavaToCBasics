@@ -1,13 +1,13 @@
 #include "GuessingGame.h"
 
 
-std::string GuessingGame::checkGuess(int answer, int guess) {
+void GuessingGame::checkGuess() {
 	std::string text1 = "";
 	std::string text2 = "";
 	std::string text3 = "";
 	std::string text4 = "";
 	std::string text5 = "";
-	GuessingGame::guessesLeft = GuessingGame::guessesLeft - 1;
+	guessesLeft = guessesLeft - 1;
 	int atempts = 5 - guessesLeft;
 	if (guessesLeft > 0) {
 		if (answer == guess) {
@@ -16,6 +16,7 @@ std::string GuessingGame::checkGuess(int answer, int guess) {
 			text3 = "!!!!!\n It only took you ";
 			text4 = atempts;
 			text5 = " tries!";
+			gameOn = false;
 		}
 		else if (guess < answer) {
 			text1 = "Sorry you guessed to LOW, ";
@@ -31,6 +32,7 @@ std::string GuessingGame::checkGuess(int answer, int guess) {
 		text1 = "Sorry you FAILED, you have ";
 		text2 = guessesLeft;
 		text3 = " tries left";
+		gameOn = false;
 	}
 	std::cout << text1 << text2 << text3 << text4 << text5 << std::endl;
 }
@@ -41,9 +43,36 @@ void GuessingGame::reset() {
 	guess = 0;
 	answer = 0;
 	guessesLeft = 5;
+	restarted = true;
 }
 
 int GuessingGame::generateNumber(int higher, int lower) {
-	//Random rand = new Random();
-	//int result = randInt(higher,lower);
+	// Seed the random number generator
+	srand(time(0));
+
+	int randomNumber = rand() % higher + lower;
+
+	return randomNumber;
+}
+
+void GuessingGame::getGuess() {
+	std::cout << "Enter your guess or type (-5) to restart: ";
+	int input;
+	std::cin >> input;
+	if(input == -5) {
+		reset();
+	}
+	else {
+		guess = input;
+		checkGuess();
+	}
+}
+
+void GuessingGame::getRange() {
+	std::cout << "Enter Lower Bound: ";
+	std::cin >> low;
+
+	std::cout << "Enter Higher Bound: ";
+	std::cin >> high;
+	answer = generateNumber(high, low);
 }
